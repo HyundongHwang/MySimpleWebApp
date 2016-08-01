@@ -1,0 +1,40 @@
+﻿@using Microsoft.Owin.Security
+@using MySimpleWebApp.Controllers
+@using MySimpleWebApp.Models
+
+@model AccountLoginOrSignInModel
+
+@{
+    ViewBag.Title = "LoginOrSignIn";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+
+
+
+
+@{
+    var providerList = this.Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
+}
+
+@foreach (var provider in providerList)
+{
+    using (Html.BeginForm("ExternalLogin", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+        <input type="hidden" name="provider" value="@provider.AuthenticationType" />
+        <button type="submit" class="btn btn-default">@provider.AuthenticationType</button>
+    }
+}
+
+<form action="/account/ExternalLoginKakao" method="post" enctype="multipart/form-data">
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+    <button type="submit" class="btn btn-default">Kakao</button>
+</form>

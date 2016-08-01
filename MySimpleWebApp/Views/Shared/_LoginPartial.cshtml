@@ -1,0 +1,34 @@
+﻿@using Microsoft.AspNet.Identity
+
+@if (Request.IsAuthenticated)
+{
+    var userName = "";
+
+    using (var db = new MySimpleWebApp.Models.mydbEntities())
+    {
+        var userEmail = this.User.Identity.GetUserName();
+        var userId = this.User.Identity.GetUserId();
+        var myUser = db.MyUsers.FirstOrDefault(u => u.Id == userId);
+        userName = myUser.Name + " (" + userEmail + ")";
+    }
+
+
+
+    <form id="logoutForm" action="/Account/LogOff" method="post" enctype="multipart/form-data" class="navbar-right" >
+        @Html.AntiForgeryToken()
+
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                @Html.ActionLink(userName + "님 안녕하세요", "Edit", "Account", routeValues: null, htmlAttributes: new { title = "Manage" })
+            </li>
+            <li><a href="javascript:document.getElementById('logoutForm').submit()">로그아웃</a></li>
+        </ul>
+    </form>
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("로그인 with 비밀번호", "LoginWithPassword", "Account")</li>
+        <li>@Html.ActionLink("로그인 or 회원가입", "LoginOrSignIn", "Account")</li>
+    </ul>
+}

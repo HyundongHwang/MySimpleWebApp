@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+
+@if (!string.IsNullOrWhiteSpace(ViewBag.userStr))
+{
+    <pre>@ViewBag.userStr</pre>
+}
+
+@if (!string.IsNullOrWhiteSpace(ViewBag.myUserStr))
+{
+    <pre>@ViewBag.myUserStr</pre>
+}

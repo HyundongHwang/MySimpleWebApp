@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+
+    <script src="scripts/jquery-2.2.4.js"></script>
+    <script src="scripts/jquery-2.2.4.intellisense.js"></script>
+    <script src="scripts/jquery.signalr-2.2.0.js"></script>
+    <script src="http://hhdyidbot.azurewebsites.net/signalr/hubs"></script>
+
+    <script>
+        $(document).ready(function () {
+            $.connection.hub.url = "http://hhdyidbot.azurewebsites.net/signalr";
+            var msgHubProxy = $.connection.msgHub;
+
+            $.connection.hub.start().done(function () {
+                $('#btnGetAllOrder').click(function () {
+                    msgHubProxy.server.getAllOrder(1).done(function (result) {
+                        alert(JSON.stringify(result));
+
+                        for (var i in result) {
+                            alert(JSON.stringify(result[i]));
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <button id="btnGetAllOrder">btnGetAllOrder</button>
+</body>
+</html>

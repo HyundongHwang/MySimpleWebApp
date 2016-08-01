@@ -1,0 +1,58 @@
+﻿@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="container">
+    <input type="button" id="btnGetOrders" value="btnGetOrders" />
+    <input type="button" id="btnClear" value="btnClear" />
+    <pre id="preResult" style="margin-top:10px;"></pre>
+</div>
+
+@section scripts {
+    <script src="~/signalr/hubs"></script>
+
+    <script>
+        $(document).ready(function()
+        {
+            $('#btnClear').click(function()
+            {
+                $('#preResult').text('');
+            });
+
+
+
+            var chatProxy = $.connection.chatHub;
+
+            $.connection.hub.start().done(function()
+            {
+                $('#preResult').append('start done!!!\n');
+                $('#preResult').append('$.connection.hub.baseUrl : ' + $.connection.hub.baseUrl + '\n');
+                $('#preResult').append('$.connection.hub.disconnectTimeout : ' + $.connection.hub.disconnectTimeout + '\n');
+                $('#preResult').append('$.connection.hub.id : ' + $.connection.hub.id + '\n');
+                $('#preResult').append('$.connection.hub.messageId : ' + $.connection.hub.messageId + '\n');
+                $('#preResult').append('$.connection.hub.socket.url : ' + $.connection.hub.socket.url + '\n');
+                $('#preResult').append('$.connection.version : ' + $.connection.version + '\n');
+
+
+
+                $('#btnGetOrders').click(function()
+                {
+                    chatProxy.server.getMyOrders().done(function(orderList)
+                    {
+                        $('#preResult').append(JSON.stringify(orderList, null, 2) + '\n');
+                    });
+                });
+
+
+
+
+            }).fail(function()
+            {
+                $('#preResult').append('start fail!!!\n');
+            });
+        });
+    </script>
+}

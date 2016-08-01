@@ -1,0 +1,201 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+
+    <link href="content/bootstrap.min.css" rel="stylesheet" />
+    <script src="scripts/jquery-1.10.2.min.js"></script>
+    <script src="scripts/bootstrap.min.js"></script>
+    <script src="scripts/jquery.validate.min.js"></script>
+    <script src="scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="scripts/modernizr-2.6.2.js"></script>
+    <script src="scripts/respond.min.js"></script>
+
+    <style>
+    </style>
+
+    <script>
+
+        $(document).ready(function()
+        {
+            var fnWriteLog = function(log)
+            {
+                $("#outputPre").html($("#outputPre").html() + log + "\n");
+            };
+
+            var fnWriteLogName = function(name, value)
+            {
+                fnWriteLog(name + " : " + value);
+            };
+
+            var fnWriteLogNameJson = function(name, value)
+            {
+                fnWriteLogName(name, JSON.stringify(value, null, 4));
+            };
+
+            self.btnClearPre.onclick = function()
+            {
+                $("#outputPre").html("");
+            };
+
+            $("#outputPre").html("");
+
+
+
+            $(document).ajaxComplete(function(event, xhr, settings)
+            {
+                fnWriteLog("HTTP <<<");
+
+                fnWriteLogName("xhr.status", xhr.status);
+                fnWriteLogName("xhr.statusText", xhr.statusText);
+                fnWriteLogName("settings.type", settings.type);
+                fnWriteLogName("settings.url", settings.url);
+                fnWriteLogNameJson("settings.headers", settings.headers);
+                fnWriteLogName("xhr.responseText", xhr.responseText);
+
+                fnWriteLog("");
+                fnWriteLog("");
+            });
+
+            $(document).ajaxSend(function(event, jqXHR, ajaxOptions)
+            {
+                fnWriteLog("HTTP >>>");
+                fnWriteLogName("ajaxOptions.type", ajaxOptions.type);
+                fnWriteLogName("ajaxOptions.url", ajaxOptions.url);
+                fnWriteLogNameJson("ajaxOptions.headers", ajaxOptions.headers);
+                fnWriteLogNameJson("ajaxOptions.data", ajaxOptions.data);
+                fnWriteLog("");
+            });
+
+            self.btnMoviesList.onclick = function(eventObject)
+            {
+                var access_token = sessionStorage.getItem("access_token");
+                var headers = {};
+
+                if (access_token)
+                {
+                    headers.Authorization = 'Bearer ' + access_token;
+                }
+
+                $.ajax({
+                    type: 'GET',
+                    url: 'api/movies/list',
+                    headers: headers
+                }).done(function(data, textStatus, jqXHR)
+                {
+                }).fail(function(jqXHR, textStatus, errorThrown)
+                {
+                });
+            };
+
+            self.btnMoviesList3.onclick = function(eventObject)
+            {
+                var access_token = sessionStorage.getItem("access_token");
+                var headers = {};
+
+                if (access_token)
+                {
+                    headers.Authorization = 'Bearer ' + access_token;
+                }
+
+                $.ajax({
+                    type: 'GET',
+                    url: 'api/movies/list3',
+                    headers: headers
+                }).done(function(data, textStatus, jqXHR)
+                {
+                }).fail(function(jqXHR, textStatus, errorThrown)
+                {
+                });
+            };
+
+            self.btnLogin.onclick = function()
+            {
+                var loginData = {
+                    grant_type: 'password',
+                    username: $("#textIdLogin").val(),
+                    password: $("#textPwLogin").val(),
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'token',
+                    contentType: 'application/json; charset=utf-8',
+                    data: loginData
+                }).done(function(data, textStatus, jqXHR)
+                {
+                    self.sessionStorage.setItem("access_token", data.access_token);
+                }).fail(function(jqXHR, textStatus, errorThrown)
+                {
+                });
+            };
+
+
+
+            self.btnLogout.onclick = function()
+            {
+                var access_token = sessionStorage.getItem("access_token");
+                var headers = {};
+
+                if (access_token)
+                {
+                    headers.Authorization = 'Bearer ' + access_token;
+                }
+
+                $.ajax({
+                    type: 'GET',
+                    url: 'api/account/logout',
+                    headers: headers,
+                }).done(function(data, textStatus, jqXHR)
+                {
+                    self.sessionStorage.removeItem("access_token");
+                }).fail(function(jqXHR, textStatus, errorThrown)
+                {
+                });
+            }
+
+
+
+        });
+    </script>
+
+</head>
+<body>
+    <div class="panel panel-default">
+        <div class="row">
+            <label class="col-md-1">textIdLogin : </label>
+            <input id="textIdLogin" class="col-md-2" type="text" />
+        </div>
+        <div class="row">
+            <label class="col-md-1">textPwLogin : </label>
+            <input id="textPwLogin" class="col-md-2" type="password" />
+        </div>
+        <div class="row">
+            <button id="btnLogin" class="col-md-1">btnLogin</button>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="row">
+            <button id="btnMoviesList" class="col-md-2">btnMoviesList(인증불필요)</button>
+        </div>
+        <div class="row">
+            <button id="btnMoviesList3" class="col-md-2">btnMoviesList3(인증필요)</button>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="row">
+            <button id="btnLogout" class="col-md-1">btnLogout</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <button id="btnClearPre" class="col-md-1">btnClearPre</button>
+    </div>
+
+    <pre id="outputPre" />
+
+</body>
+</html>
