@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using Microsoft.AspNet.Identity.Owin;
+using MySimpleWebApp.Auth;
 
 namespace MySimpleWebApp.Controllers
 {

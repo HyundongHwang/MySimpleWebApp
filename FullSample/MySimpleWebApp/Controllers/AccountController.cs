@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using MySimpleWebApp.Auth;
 using MySimpleWebApp.Models;
+using MySimpleWebApp.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

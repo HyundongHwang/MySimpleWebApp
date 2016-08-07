@@ -5,7 +5,7 @@ using System.Web;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace MySimpleWebApp.Models
+namespace MySimpleWebApp.ViewModels
 {
     public class ExternalLoginListViewModel
     {

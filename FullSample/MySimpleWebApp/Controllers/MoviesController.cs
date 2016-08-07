@@ -19,7 +19,8 @@ namespace MySimpleWebApp.Controllers
         // GET: Movies
         public async Task<ActionResult> Index()
         {
-            return View(await db.Movies.ToListAsync());
+            var list = await db.Movies.ToListAsync();
+            return View(list);
         }
 
         // GET: Movies/Details/5
@@ -122,7 +123,7 @@ namespace MySimpleWebApp.Controllers
         // 초과 게시 공격으로부터 보호하려면 바인딩하려는 특정 속성을 사용하도록 설정하십시오. 
         // 자세한 내용은 http://go.microsoft.com/fwlink/?LinkId=317598을(를) 참조하십시오.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "ID,Title,ReleaseDate,Genre,Price")] Movie movie, HttpPostedFileBase thumbnailImg)
         {
             if (ModelState.IsValid)
@@ -134,13 +135,13 @@ namespace MySimpleWebApp.Controllers
             return View(movie);
         }
 
-        // GET: Movies/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Movie movie = await db.Movies.FindAsync(id);
             if (movie == null)
             {
@@ -151,7 +152,7 @@ namespace MySimpleWebApp.Controllers
 
         // POST: Movies/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             Movie movie = await db.Movies.FindAsync(id);
