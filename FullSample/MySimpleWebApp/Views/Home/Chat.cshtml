@@ -32,7 +32,8 @@
             {
                 $('#sendmessage').click(function()
                 {
-                    chatProxy.server.send($('#displayname').text(), $('#message').text());
+                    chatProxy.server.send($('#displayname').text(), $('#message').val());
+                    $('#message').val('');
                     $('#message').focus();
                 });
             }).fail(function()
